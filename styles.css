@@ -118,6 +118,7 @@ main {
     gap: 1.5rem;
     align-items: start;
     grid-auto-flow: dense;
+    grid-auto-rows: minmax(200px, auto);
 }
 
 .gallery-item {
@@ -135,9 +136,8 @@ main {
 
 .gallery-item img {
     width: 100%;
-    height: auto;
-    max-height: 100%;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
     transition: transform var(--transition-speed);
     opacity: 0;
     transition: opacity 0.3s ease-in-out;

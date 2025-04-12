@@ -175,13 +175,12 @@ function createGalleryItem(item) {
     tempImg.src = item.src;
     tempImg.onload = function() {
         const aspectRatio = this.width / this.height;
-        if (aspectRatio > 1.2) {
-            galleryItem.style.gridRow = 'span 2';
-        } else if (aspectRatio < 0.8) {
-            galleryItem.style.gridRow = 'span 1';
-        } else {
-            galleryItem.style.gridRow = 'span 1';
-        }
+        const baseHeight = 200; // 基础高度
+        const rowHeight = 1.5; // 每行的高度比例
+        
+        // 根据图片高度计算需要跨越的行数
+        const rows = Math.ceil((this.height / baseHeight) * rowHeight);
+        galleryItem.style.gridRow = `span ${rows}`;
     };
     
     galleryItem.appendChild(img);
