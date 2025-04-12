@@ -179,6 +179,8 @@ function createGalleryItem(item) {
             galleryItem.style.gridRow = 'span 2';
         } else if (aspectRatio < 0.8) {
             galleryItem.style.gridRow = 'span 1';
+        } else {
+            galleryItem.style.gridRow = 'span 1';
         }
     };
     
