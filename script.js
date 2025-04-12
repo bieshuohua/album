@@ -160,15 +160,23 @@ function createGalleryItem(item) {
     galleryItem.dataset.category = item.category;
     
     const img = document.createElement('img');
-    img.dataset.src = item.src; // 使用data-src存储实际图片地址
-    img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"%3E%3C/svg%3E'; // 使用一个1x1的透明SVG作为占位图
+    img.dataset.src = item.src;
+    img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"%3E%3C/svg%3E';
     img.alt = item.title;
     img.className = 'lazy-load';
+    
+    // 计算图片的宽高比并设置grid-row-end
+    const image = new Image();
+    image.onload = () => {
+        const aspectRatio = image.height / image.width;
+        const rowSpan = Math.ceil(aspectRatio * 25); // 25是一个基准值，可以根据需要调整
+        galleryItem.style.gridRowEnd = `span ${rowSpan}`;
+    };
+    image.src = item.src;
     
     galleryItem.appendChild(img);
     galleryItem.addEventListener('click', () => openLightbox(galleryData.indexOf(item)));
     
-    // 开始观察图片元素
     lazyLoadObserver.observe(img);
     
     return galleryItem;
@@ -237,4 +245,21 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Initialize gallery
-renderGallery(); 
+renderGallery();
+
+// 添加窗口大小改变时的重排功能
+let resizeTimer;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        const items = document.querySelectorAll('.gallery-item');
+        items.forEach(item => {
+            const img = item.querySelector('img');
+            if (img.complete) {
+                const aspectRatio = img.naturalHeight / img.naturalWidth;
+                const rowSpan = Math.ceil(aspectRatio * 25);
+                item.style.gridRowEnd = `span ${rowSpan}`;
+            }
+        });
+    }, 250);
+}); 
