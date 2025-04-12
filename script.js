@@ -175,12 +175,10 @@ function createGalleryItem(item) {
     tempImg.src = item.src;
     tempImg.onload = function() {
         const aspectRatio = this.width / this.height;
-        const baseHeight = 200; // 基础高度
-        const rowHeight = 1.5; // 每行的高度比例
+        const rowHeight = 10; // 与 CSS 中的 grid-auto-rows 值对应
+        const rowSpan = Math.ceil((this.height / this.width) * 250 / rowHeight); // 250 是 minmax 中的最小值
         
-        // 根据图片高度计算需要跨越的行数
-        const rows = Math.ceil((this.height / baseHeight) * rowHeight);
-        galleryItem.style.gridRow = `span ${rows}`;
+        galleryItem.style.gridRow = `span ${rowSpan}`;
     };
     
     galleryItem.appendChild(img);
