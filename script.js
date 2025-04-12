@@ -130,6 +130,36 @@ const lightboxPrev = document.querySelector('.lightbox-prev');
 const lightboxNext = document.querySelector('.lightbox-next');
 
 let currentImageIndex = 0;
+let isLoading = false;
+let currentPage = 1;
+const imagesPerPage = 12;
+
+// Intersection Observer for lazy loading
+const imageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.classList.add('loaded');
+            observer.unobserve(img);
+        }
+    });
+}, {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+});
+
+// Scroll Observer for infinite loading
+const scrollObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting && !isLoading) {
+        loadMoreImages();
+    }
+}, {
+    root: null,
+    rootMargin: '100px',
+    threshold: 0
+});
 
 function createGalleryItem(item) {
     const galleryItem = document.createElement('div');
@@ -137,25 +167,67 @@ function createGalleryItem(item) {
     galleryItem.dataset.category = item.category;
     
     const img = document.createElement('img');
-    img.src = item.src;
+    img.dataset.src = item.src;
     img.alt = item.title;
-    img.loading = 'lazy';
+    
+    // 预加载图片以获取实际尺寸
+    const tempImg = new Image();
+    tempImg.src = item.src;
+    tempImg.onload = function() {
+        const aspectRatio = this.width / this.height;
+        if (aspectRatio > 1.2) {
+            galleryItem.style.gridRow = 'span 2';
+        } else if (aspectRatio < 0.8) {
+            galleryItem.style.gridRow = 'span 1';
+        }
+    };
     
     galleryItem.appendChild(img);
     galleryItem.addEventListener('click', () => openLightbox(galleryData.indexOf(item)));
+    imageObserver.observe(img);
     
     return galleryItem;
 }
 
+function loadMoreImages() {
+    if (isLoading) return;
+    isLoading = true;
+    
+    const start = (currentPage - 1) * imagesPerPage;
+    const end = start + imagesPerPage;
+    const currentImages = galleryData.slice(start, end);
+    
+    if (currentImages.length === 0) {
+        isLoading = false;
+        return;
+    }
+    
+    currentImages.forEach(item => {
+        galleryGrid.appendChild(createGalleryItem(item));
+    });
+    
+    currentPage++;
+    isLoading = false;
+}
+
 function renderGallery(filter = 'all') {
     galleryGrid.innerHTML = '';
+    currentPage = 1;
+    
     const filteredItems = filter === 'all' 
         ? galleryData 
         : galleryData.filter(item => item.category === filter);
     
-    filteredItems.forEach(item => {
+    const initialImages = filteredItems.slice(0, imagesPerPage);
+    initialImages.forEach(item => {
         galleryGrid.appendChild(createGalleryItem(item));
     });
+    
+    // 设置无限滚动观察器
+    const sentinel = document.createElement('div');
+    sentinel.className = 'scroll-sentinel';
+    galleryGrid.appendChild(sentinel);
+    scrollObserver.observe(sentinel);
 }
 
 function openLightbox(index) {
