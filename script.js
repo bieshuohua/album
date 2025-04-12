@@ -130,35 +130,28 @@ const lightboxPrev = document.querySelector('.lightbox-prev');
 const lightboxNext = document.querySelector('.lightbox-next');
 
 let currentImageIndex = 0;
-let isLoading = false;
-let currentPage = 1;
-const imagesPerPage = 12;
 
-// Intersection Observer for lazy loading
-const imageObserver = new IntersectionObserver((entries, observer) => {
+// Lazy loading functionality
+const lazyLoadObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             const img = entry.target;
-            img.src = img.dataset.src;
-            img.classList.add('loaded');
-            observer.unobserve(img);
+            const src = img.dataset.src;
+            if (src) {
+                const image = new Image();
+                image.onload = () => {
+                    img.src = src;
+                    img.classList.add('loaded');
+                    img.removeAttribute('data-src');
+                    observer.unobserve(img);
+                };
+                image.src = src;
+            }
         }
     });
 }, {
-    root: null,
-    rootMargin: '0px',
+    rootMargin: '50px 0px',
     threshold: 0.1
-});
-
-// Scroll Observer for infinite loading
-const scrollObserver = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting && !isLoading) {
-        loadMoreImages();
-    }
-}, {
-    root: null,
-    rootMargin: '100px',
-    threshold: 0
 });
 
 function createGalleryItem(item) {
@@ -167,91 +160,41 @@ function createGalleryItem(item) {
     galleryItem.dataset.category = item.category;
     
     const img = document.createElement('img');
-    img.dataset.src = item.src;
+    img.dataset.src = item.src; // 使用data-src存储实际图片地址
+    img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"%3E%3C/svg%3E'; // 使用一个1x1的透明SVG作为占位图
     img.alt = item.title;
-    
-    // 预加载图片以获取实际尺寸
-    const tempImg = new Image();
-    tempImg.src = item.src;
-    tempImg.onload = function() {
-        const aspectRatio = this.width / this.height;
-        // 根据图片比例调整布局
-        if (aspectRatio > 1.5) {
-            galleryItem.style.gridColumn = 'span 2';
-        } else if (aspectRatio < 0.7) {
-            galleryItem.style.gridRow = 'span 2';
-        }
-    };
+    img.className = 'lazy-load';
     
     galleryItem.appendChild(img);
     galleryItem.addEventListener('click', () => openLightbox(galleryData.indexOf(item)));
-    imageObserver.observe(img);
+    
+    // 开始观察图片元素
+    lazyLoadObserver.observe(img);
     
     return galleryItem;
 }
 
-function loadMoreImages() {
-    if (isLoading) return;
-    isLoading = true;
-    
-    const start = (currentPage - 1) * imagesPerPage;
-    const end = start + imagesPerPage;
-    const currentImages = galleryData.slice(start, end);
-    
-    if (currentImages.length === 0) {
-        isLoading = false;
-        return;
-    }
-    
-    currentImages.forEach(item => {
-        galleryGrid.appendChild(createGalleryItem(item));
-    });
-    
-    currentPage++;
-    isLoading = false;
-}
-
 function renderGallery(filter = 'all') {
     galleryGrid.innerHTML = '';
-    currentPage = 1;
-    
     const filteredItems = filter === 'all' 
         ? galleryData 
         : galleryData.filter(item => item.category === filter);
     
-    // 创建图片加载队列
-    const imageLoadQueue = [];
     filteredItems.forEach(item => {
-        imageLoadQueue.push(createGalleryItem(item));
+        galleryGrid.appendChild(createGalleryItem(item));
     });
-    
-    // 按顺序加载图片
-    const loadNextImage = () => {
-        if (imageLoadQueue.length === 0) return;
-        
-        const item = imageLoadQueue.shift();
-        galleryGrid.appendChild(item);
-        
-        // 使用requestAnimationFrame来优化性能
-        requestAnimationFrame(loadNextImage);
-    };
-    
-    // 开始加载图片
-    loadNextImage();
-    
-    // 设置无限滚动观察器
-    const sentinel = document.createElement('div');
-    sentinel.className = 'scroll-sentinel';
-    galleryGrid.appendChild(sentinel);
-    scrollObserver.observe(sentinel);
 }
 
 function openLightbox(index) {
     currentImageIndex = index;
-    lightboxImage.src = galleryData[index].src;
-    lightboxImage.alt = galleryData[index].title;
-    lightbox.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    const img = new Image();
+    img.onload = () => {
+        lightboxImage.src = galleryData[index].src;
+        lightboxImage.alt = galleryData[index].title;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
+    img.src = galleryData[index].src;
 }
 
 function closeLightbox() {
