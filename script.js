@@ -76,6 +76,46 @@ const galleryData = [
         category: 'painting',
         title: '吃冰棍的小荧'
     },
+    {
+        src: 'https://s21.ax1x.com/2025/04/13/pERbPM9.png',
+        category: 'painting',
+        title: '玩泡泡的小欣'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/13/pERbFq1.jpg',
+        category: 'painting',
+        title: '走在花园里的小荧'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/13/pERbirR.jpg',
+        category: 'painting',
+        title: '动漫睡眠小欣'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/13/pERbEa6.png',
+        category: 'painting',
+        title: '氛围感夜灯小欣'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/13/pERbAVx.jpg',
+        category: 'painting',
+        title: '花园里的小荧'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/13/pERbVIK.jpg',
+        category: 'painting',
+        title: '一张封神小欣'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/13/pERbePO.jpg',
+        category: 'painting',
+        title: '小欣抽卡界面'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/13/pERbmGD.jpg',
+        category: 'painting',
+        title: '小欣角色立绘'
+    },
     
     // Add more images as needed(photography or painting category)
 ];
