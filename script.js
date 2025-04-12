@@ -32,47 +32,47 @@ mobileMenuBtn.addEventListener('click', () => {
 // Gallery data
 const galleryData = [
     {
-        src: 'https://imgse.com/i/pERHG34',
+        src: 'https://s21.ax1x.com/2025/04/13/pERHG34.png',
         category: 'painting',
         title: '毕加索的睡女神'
     },
     {
-        src: 'https://imgse.com/i/pERH14U',
+        src: 'https://s21.ax1x.com/2025/04/13/pERH14U.jpg',
         category: 'painting',
         title: '近身描绘'
     },
     {
-        src: 'https://imgse.com/i/pERHJgJ',
+        src: 'https://s21.ax1x.com/2025/04/13/pERHJgJ.png',
         category: 'painting',
         title: '印象派的睡女神'
     },
     {
-        src: 'https://imgse.com/i/pERHNuR',
+        src: 'https://s21.ax1x.com/2025/04/13/pERHNuR.png',
         category: 'painting',
         title: '写实派的睡女神'
     },
     {
-        src: 'https://imgse.com/i/pERH8CF',
+        src: 'https://s21.ax1x.com/2025/04/13/pERH8CF.png',
         category: 'painting',
         title: '水彩系的睡女神'
     },
     {
-        src: 'https://imgse.com/i/pERHYv9',
+        src: 'https://s21.ax1x.com/2025/04/13/pERHYv9.jpg',
         category: 'painting',
         title: '皮克斯的羽球女神'
     },
     {
-        src: 'https://imgse.com/i/pERHUD1',
+        src: 'https://s21.ax1x.com/2025/04/13/pERHUD1.jpg',
         category: 'painting',
         title: '卧室里的小荧'
     },
     {
-        src: 'https://imgse.com/i/pERHaHx',
+        src: 'https://s21.ax1x.com/2025/04/13/pERHaHx.jpg',
         category: 'painting',
         title: '花园里的小荧'
     },
     {
-        src: 'https://imgse.com/i/pERHwE6',
+        src: 'https://s21.ax1x.com/2025/04/13/pERHwE6.jpg',
         category: 'painting',
         title: '吃冰棍的小荧'
     },
