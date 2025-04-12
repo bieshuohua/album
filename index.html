@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>皮蛋的画廊</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">皮蛋的画廊</div>
+            <div class="nav-links">
+                <a href="#home">首页</a>
+                <a href="#gallery">画廊</a>
+                <a href="#about">关于</a>
+                <button id="theme-toggle" aria-label="切换主题">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <h1>欢迎来到皮蛋的画廊</h1>
+            <p>来看看皮蛋的摄影与绘画作品</p>
+        </section>
+
+        <section id="gallery" class="gallery">
+            <div class="gallery-filters">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="photography">摄影</button>
+                <button class="filter-btn" data-filter="painting">绘画</button>
+            </div>
+            <div class="gallery-grid">
+                <!-- 图片将通过JavaScript动态加载 -->
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <h2>关于皮蛋</h2>
+            <p>皮蛋是一个热爱摄影和绘画的年轻人，他喜欢用镜头记录生活中的美好瞬间，也喜欢用画笔描绘自己的内心世界。————AI是这么说的。</p>
+            <p>其实皮蛋长期情绪低落，能量减少、注意力不集中，对生活失去兴趣，思维缓慢、活动缓慢，究极宅，食欲低下，肠胃消化不好，内心无望。</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 皮蛋. 保留所有权利.</p>
+    </footer>
+
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close">&times;</button>
+        <button class="lightbox-prev">&lt;</button>
+        <button class="lightbox-next">&gt;</button>
+        <img src="" alt="" class="lightbox-image">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
