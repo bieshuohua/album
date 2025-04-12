@@ -175,10 +175,12 @@ function createGalleryItem(item) {
     tempImg.src = item.src;
     tempImg.onload = function() {
         const aspectRatio = this.width / this.height;
-        const rowHeight = 10; // 与 CSS 中的 grid-auto-rows 值对应
-        const rowSpan = Math.ceil((this.height / this.width) * 250 / rowHeight); // 250 是 minmax 中的最小值
-        
-        galleryItem.style.gridRow = `span ${rowSpan}`;
+        // 根据图片比例调整布局
+        if (aspectRatio > 1.5) {
+            galleryItem.style.gridColumn = 'span 2';
+        } else if (aspectRatio < 0.7) {
+            galleryItem.style.gridRow = 'span 2';
+        }
     };
     
     galleryItem.appendChild(img);
@@ -217,10 +219,25 @@ function renderGallery(filter = 'all') {
         ? galleryData 
         : galleryData.filter(item => item.category === filter);
     
-    const initialImages = filteredItems.slice(0, imagesPerPage);
-    initialImages.forEach(item => {
-        galleryGrid.appendChild(createGalleryItem(item));
+    // 创建图片加载队列
+    const imageLoadQueue = [];
+    filteredItems.forEach(item => {
+        imageLoadQueue.push(createGalleryItem(item));
     });
+    
+    // 按顺序加载图片
+    const loadNextImage = () => {
+        if (imageLoadQueue.length === 0) return;
+        
+        const item = imageLoadQueue.shift();
+        galleryGrid.appendChild(item);
+        
+        // 使用requestAnimationFrame来优化性能
+        requestAnimationFrame(loadNextImage);
+    };
+    
+    // 开始加载图片
+    loadNextImage();
     
     // 设置无限滚动观察器
     const sentinel = document.createElement('div');
