@@ -165,12 +165,13 @@ function createGalleryItem(item) {
     img.alt = item.title;
     img.className = 'lazy-load';
     
-    // 计算图片的宽高比并设置grid-row-end
+    // 检查图片宽高比
     const image = new Image();
-    image.onload = () => {
-        const aspectRatio = image.height / image.width;
-        const rowSpan = Math.ceil(aspectRatio * 25); // 25是一个基准值，可以根据需要调整
-        galleryItem.style.gridRowEnd = `span ${rowSpan}`;
+    image.onload = function() {
+        const aspectRatio = this.width / this.height;
+        if (aspectRatio > 1.2) { // 如果宽高比大于1.5，则认为是宽图
+            galleryItem.classList.add('wide');
+        }
     };
     image.src = item.src;
     
@@ -245,21 +246,4 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Initialize gallery
-renderGallery();
-
-// 添加窗口大小改变时的重排功能
-let resizeTimer;
-window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-        const items = document.querySelectorAll('.gallery-item');
-        items.forEach(item => {
-            const img = item.querySelector('img');
-            if (img.complete) {
-                const aspectRatio = img.naturalHeight / img.naturalWidth;
-                const rowSpan = Math.ceil(aspectRatio * 25);
-                item.style.gridRowEnd = `span ${rowSpan}`;
-            }
-        });
-    }, 250);
-}); 
+renderGallery(); 

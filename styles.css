@@ -114,9 +114,8 @@ main {
 
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
-    grid-auto-rows: 10px;
 }
 
 .gallery-item {
@@ -128,13 +127,17 @@ main {
     align-items: center;
     justify-content: center;
     min-height: 300px;
-    grid-row-end: span 30;
+}
+
+.gallery-item.wide {
+    grid-column: span 2;
 }
 
 .gallery-item img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
     transition: transform var(--transition-speed), opacity 0.3s ease-in-out;
     opacity: 0;
 }
