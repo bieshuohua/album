@@ -116,6 +116,46 @@ const galleryData = [
         category: 'painting',
         title: '小欣角色立绘'
     },
+    {
+        src: 'https://s21.ax1x.com/2025/04/14/pEWNW3d.jpg',
+        category: 'painting',
+        title: '小女单角色立绘'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/14/pEWNg4e.jpg',
+        category: 'painting',
+        title: '奔跑的小欣'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/14/pEWN5ut.jpg',
+        category: 'painting',
+        title: '海边小溪静坐'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/14/pEWNR9H.jpg',
+        category: 'painting',
+        title: '春日小狄'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/14/pEWNcND.jpg',
+        category: 'painting',
+        title: '小欣毛毛球起跳'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/14/pEWNfgA.jpg',
+        category: 'painting',
+        title: '小欣的泡泡畅想1'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/14/pEWNhjI.jpg',
+        category: 'painting',
+        title: '小欣的泡泡畅想2'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/14/pEWNIDP.png',
+        category: 'painting',
+        title: '小欣的泡泡畅想3'
+    },
     
     // Add more images as needed(photography or painting category)
 ];
@@ -169,7 +209,7 @@ function createGalleryItem(item) {
     const image = new Image();
     image.onload = function() {
         const aspectRatio = this.width / this.height;
-        if (aspectRatio > 1.2) { // 如果宽高比大于1.5，则认为是宽图
+        if (aspectRatio > 1.2) { // 如果宽高比大于1.2，则认为是宽图
             galleryItem.classList.add('wide');
         }
     };
