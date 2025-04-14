@@ -171,6 +171,11 @@ const galleryData = [
         category: 'painting',
         title: '小欣的泡泡畅想3'
     },
+    {
+        src: 'https://s21.ax1x.com/2025/04/14/pEWhd8s.md.png',
+        category: 'painting',
+        title: '小荧-泳装'
+    },
     
     // Add more images as needed(photography or painting category)
 ];
