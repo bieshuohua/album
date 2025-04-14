@@ -32,7 +32,7 @@ mobileMenuBtn.addEventListener('click', () => {
 // Gallery data
 const galleryData = [
     {
-        src: 'https://s21.ax1x.com/2025/04/13/pEWwyMd.jpg',
+        src: 'https://s21.ax1x.com/2025/04/14/pEWwyMd.jpg',
         category: 'painting',
         title: '概念小黄鸭'
     },
@@ -62,7 +62,7 @@ const galleryData = [
         title: '水彩系的睡女神'
     },
     {
-        src: 'https://s21.ax1x.com/2025/04/13/pEWw6sA.jpg',
+        src: 'https://s21.ax1x.com/2025/04/14/pEWw6sA.jpg',
         category: 'painting',
         title: '野兽派的睡女神'
     },
