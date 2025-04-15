@@ -23,10 +23,38 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: var(--background-color);
+    background: linear-gradient(135deg, #e0e7ff 0%, #fffbe6 100%);
     color: var(--text-color);
     line-height: 1.6;
     transition: background-color var(--transition-speed), color var(--transition-speed);
+    overflow-x: hidden;
+}
+
+[data-theme="dark"] body {
+    background: linear-gradient(135deg, #232946 0%, #181824 100%);
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(circle at 20% 30%, #a5b4fc55 0, transparent 50%),
+                radial-gradient(circle at 80% 70%, #fcd34d55 0, transparent 60%),
+                radial-gradient(circle at 60% 10%, #fca5a555 0, transparent 60%);
+    animation: bg-bubble-move 12s linear infinite alternate;
+}
+
+[data-theme="dark"] body::before {
+    background: radial-gradient(circle at 20% 30%, #6366f155 0, transparent 50%),
+                radial-gradient(circle at 80% 70%, #fde68a33 0, transparent 60%),
+                radial-gradient(circle at 60% 10%, #f472b633 0, transparent 60%);
+}
+
+@keyframes bg-bubble-move {
+    0% { background-position: 20% 30%, 80% 70%, 60% 10%; }
+    100% { background-position: 25% 35%, 75% 65%, 65% 15%; }
 }
 
 header {
@@ -36,6 +64,32 @@ header {
     width: 100%;
     top: 0;
     z-index: 1000;
+    transition: box-shadow 0.3s, padding 0.3s;
+}
+
+header .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    transition: font-size 0.3s;
+}
+
+.nav-links a {
+    font-size: 1rem;
+    transition: font-size 0.3s;
+}
+
+header.scrolled {
+    box-shadow: 0 4px 24px 0 rgba(44, 62, 80, 0.50);
+    backdrop-filter: blur(6px);
+    padding: 0.5rem 1rem;
+}
+
+header.scrolled .logo {
+    font-size: 1.1rem;
+}
+
+header.scrolled .nav-links a {
+    font-size: 0.92rem;
 }
 
 nav {
@@ -104,7 +158,41 @@ main {
     color: var(--text-color);
     cursor: pointer;
     border-radius: 4px;
-    transition: background-color var(--transition-speed);
+    transition: background-color var(--transition-speed), transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.filter-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px #3498db33;
+}
+
+.filter-btn:hover {
+    background-color: var(--secondary-color);
+    color: white;
+    box-shadow: 0 4px 16px #3498db33;
+    transform: translateY(-2px) scale(1.05);
+}
+
+.filter-btn::after {
+    content: '';
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 0; height: 0;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s, height 0.4s, opacity 0.4s;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.filter-btn:active::after {
+    width: 120px;
+    height: 120px;
+    opacity: 1;
+    transition: 0s;
 }
 
 .filter-btn.active {
@@ -127,6 +215,13 @@ main {
     align-items: center;
     justify-content: center;
     min-height: 300px;
+    box-shadow: 0 2px 16px #0001;
+    animation: gallery-pop-in 0.7s cubic-bezier(.22,1.12,.62,1.01) both;
+}
+
+@keyframes gallery-pop-in {
+    0% { opacity: 0; transform: scale(0.85) translateY(40px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 .gallery-item.wide {
@@ -140,14 +235,18 @@ main {
     object-fit: contain;
     transition: transform var(--transition-speed), opacity 0.3s ease-in-out;
     opacity: 0;
+    filter: blur(4px) grayscale(0.2);
 }
 
 .gallery-item img.loaded {
     opacity: 1;
+    filter: blur(0) grayscale(0);
+    transition: opacity 0.7s cubic-bezier(.22,1.12,.62,1.01), filter 0.7s cubic-bezier(.22,1.12,.62,1.01);
 }
 
 .gallery-item:hover img {
-    transform: scale(1.05);
+    transform: scale(1.08) rotate(-2deg);
+    filter: brightness(1.08) saturate(1.2);
 }
 
 .lightbox {
