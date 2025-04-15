@@ -33,6 +33,11 @@ mobileMenuBtn.addEventListener('click', () => {
 // Gallery data
 const galleryData = [
     {
+        src: 'https://s21.ax1x.com/2025/04/15/pEfdlss.jpg',
+        category: 'painting',
+        title: '蜡笔小欣'
+    },
+    {
         src: 'https://s21.ax1x.com/2025/04/14/pEWhEDK.jpg',
         category: 'painting',
         title: '新艺术派小欣觉觉'
