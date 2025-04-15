@@ -33,9 +33,19 @@ mobileMenuBtn.addEventListener('click', () => {
 // Gallery data
 const galleryData = [
     {
+        src: 'https://s21.ax1x.com/2025/04/16/pEfsGw9.jpg',
+        category: 'painting',
+        title: '皮克斯小欣觉觉'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/16/pEfs1L4.jpg',
+        category: 'painting',
+        title: '低多边形3D小欣觉觉'
+    },
+    {
         src: 'https://s21.ax1x.com/2025/04/15/pEfdlss.jpg',
         category: 'painting',
-        title: '蜡笔小欣'
+        title: '蜡笔小欣觉觉'
     },
     {
         src: 'https://s21.ax1x.com/2025/04/14/pEWhEDK.jpg',
