@@ -43,7 +43,7 @@ const galleryData = [
         title: '低多边形3D小欣觉觉'
     },
     {
-        src: 'https://s21.ax1x.com/2025/04/15/pEfdlss.jpg',
+        src: 'https://s21.ax1x.com/2025/04/16/pEfsJoR.jpg',
         category: 'painting',
         title: '蜡笔小欣觉觉'
     },
