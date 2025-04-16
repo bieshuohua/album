@@ -33,28 +33,38 @@ mobileMenuBtn.addEventListener('click', () => {
 // Gallery data
 const galleryData = [
     {
+        src: 'https://s21.ax1x.com/2025/04/17/pEhMPaj.jpg',
+        category: 'sleep',
+        title: '抽象小欣觉觉'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/17/pEhMCZQ.jpg',
+        category: 'sleep',
+        title: '康定斯基式的小欣觉觉'
+    },
+    {
         src: 'https://s21.ax1x.com/2025/04/16/pEfflVO.jpg',
-        category: 'painting',
+        category: 'sleep',
         title: '樱桃小丸子小欣觉觉'
     },
     {
         src: 'https://s21.ax1x.com/2025/04/16/pEfsGw9.jpg',
-        category: 'painting',
+        category: 'sleep',
         title: '皮克斯小欣觉觉'
     },
     {
         src: 'https://s21.ax1x.com/2025/04/16/pEfs1L4.jpg',
-        category: 'painting',
+        category: 'sleep',
         title: '低多边形3D小欣觉觉'
     },
     {
         src: 'https://s21.ax1x.com/2025/04/16/pEfsJoR.jpg',
-        category: 'painting',
+        category: 'sleep',
         title: '蜡笔小欣觉觉'
     },
     {
         src: 'https://s21.ax1x.com/2025/04/14/pEWhEDK.jpg',
-        category: 'painting',
+        category: 'sleep',
         title: '新艺术派小欣觉觉'
     },
     {
@@ -64,7 +74,7 @@ const galleryData = [
     },
     {
         src: 'https://s21.ax1x.com/2025/04/13/pERHG34.png',
-        category: 'painting',
+        category: 'sleep',
         title: '毕加索的睡女神'
     },
     {
@@ -74,22 +84,22 @@ const galleryData = [
     },
     {
         src: 'https://s21.ax1x.com/2025/04/13/pERHJgJ.png',
-        category: 'painting',
+        category: 'sleep',
         title: '印象派的睡女神'
     },
     {
         src: 'https://s21.ax1x.com/2025/04/13/pERHNuR.png',
-        category: 'painting',
+        category: 'sleep',
         title: '写实派的睡女神'
     },
     {
         src: 'https://s21.ax1x.com/2025/04/13/pERH8CF.png',
-        category: 'painting',
+        category: 'sleep',
         title: '水彩系的睡女神'
     },
     {
         src: 'https://s21.ax1x.com/2025/04/14/pEWw6sA.jpg',
-        category: 'painting',
+        category: 'sleep',
         title: '野兽派的睡女神'
     },
     {
@@ -124,7 +134,7 @@ const galleryData = [
     },
     {
         src: 'https://s21.ax1x.com/2025/04/13/pERbirR.jpg',
-        category: 'painting',
+        category: 'sleep',
         title: '动漫睡眠小欣'
     },
     {
