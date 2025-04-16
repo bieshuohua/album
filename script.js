@@ -33,6 +33,11 @@ mobileMenuBtn.addEventListener('click', () => {
 // Gallery data
 const galleryData = [
     {
+        src: 'https://s21.ax1x.com/2025/04/17/pEhMgOS.jpg',
+        category: 'sleep',
+        title: 'Wassily Kandinsky的抽象小欣觉觉'
+    },
+    {
         src: 'https://s21.ax1x.com/2025/04/17/pEhMPaj.jpg',
         category: 'sleep',
         title: '抽象小欣觉觉'
