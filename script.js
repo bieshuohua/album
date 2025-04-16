@@ -33,6 +33,11 @@ mobileMenuBtn.addEventListener('click', () => {
 // Gallery data
 const galleryData = [
     {
+        src: 'https://s21.ax1x.com/2025/04/16/pEfflVO.jpg',
+        category: 'painting',
+        title: '樱桃小丸子小欣觉觉'
+    },
+    {
         src: 'https://s21.ax1x.com/2025/04/16/pEfsGw9.jpg',
         category: 'painting',
         title: '皮克斯小欣觉觉'
