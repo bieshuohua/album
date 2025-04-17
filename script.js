@@ -33,6 +33,11 @@ mobileMenuBtn.addEventListener('click', () => {
 // Gallery data
 const galleryData = [
     {
+        src: 'https://s21.ax1x.com/2025/04/17/pEhRVED.jpg',
+        category: 'sleep',
+        title: '直线小欣觉觉'
+    },
+    {
         src: 'https://s21.ax1x.com/2025/04/17/pEh2Q7F.jpg',
         category: 'sleep',
         title: 'gpt-4o的最抽象小欣觉觉'
@@ -63,11 +68,6 @@ const galleryData = [
         title: '皮克斯小欣觉觉'
     },
     {
-        src: 'https://s21.ax1x.com/2025/04/17/pEh2M0U.jpg',
-        category: 'sleep',
-        title: '直线小欣觉觉'
-    },
-    {
         src: 'https://s21.ax1x.com/2025/04/16/pEfs1L4.jpg',
         category: 'sleep',
         title: '低多边形3D小欣觉觉'
@@ -83,19 +83,9 @@ const galleryData = [
         title: '新艺术派小欣觉觉'
     },
     {
-        src: 'https://s21.ax1x.com/2025/04/14/pEWwyMd.jpg',
-        category: 'painting',
-        title: '概念小黄鸭'
-    },
-    {
         src: 'https://s21.ax1x.com/2025/04/13/pERHG34.png',
         category: 'sleep',
         title: '毕加索的睡女神'
-    },
-    {
-        src: 'https://s21.ax1x.com/2025/04/13/pERH14U.jpg',
-        category: 'painting',
-        title: '近身描绘'
     },
     {
         src: 'https://s21.ax1x.com/2025/04/13/pERHJgJ.png',
@@ -116,6 +106,21 @@ const galleryData = [
         src: 'https://s21.ax1x.com/2025/04/14/pEWw6sA.jpg',
         category: 'sleep',
         title: '野兽派的睡女神'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/13/pERbirR.jpg',
+        category: 'sleep',
+        title: '动漫睡眠小欣'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/14/pEWwyMd.jpg',
+        category: 'painting',
+        title: '概念小黄鸭'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/13/pERH14U.jpg',
+        category: 'painting',
+        title: '近身描绘'
     },
     {
         src: 'https://s21.ax1x.com/2025/04/13/pERHYv9.jpg',
@@ -146,11 +151,6 @@ const galleryData = [
         src: 'https://s21.ax1x.com/2025/04/13/pERbFq1.jpg',
         category: 'painting',
         title: '走在花园里的小荧'
-    },
-    {
-        src: 'https://s21.ax1x.com/2025/04/13/pERbirR.jpg',
-        category: 'sleep',
-        title: '动漫睡眠小欣'
     },
     {
         src: 'https://s21.ax1x.com/2025/04/13/pERbEa6.png',
