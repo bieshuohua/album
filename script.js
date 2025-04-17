@@ -33,6 +33,11 @@ mobileMenuBtn.addEventListener('click', () => {
 // Gallery data
 const galleryData = [
     {
+        src: 'https://s21.ax1x.com/2025/04/17/pEh2Q7F.jpg',
+        category: 'sleep',
+        title: 'gpt-4o的最抽象小欣觉觉'
+    },
+    {
         src: 'https://s21.ax1x.com/2025/04/17/pEhMgOS.jpg',
         category: 'sleep',
         title: 'Wassily Kandinsky的抽象小欣觉觉'
@@ -56,6 +61,11 @@ const galleryData = [
         src: 'https://s21.ax1x.com/2025/04/16/pEfsGw9.jpg',
         category: 'sleep',
         title: '皮克斯小欣觉觉'
+    },
+    {
+        src: 'https://s21.ax1x.com/2025/04/17/pEh2M0U.jpg',
+        category: 'sleep',
+        title: '直线小欣觉觉'
     },
     {
         src: 'https://s21.ax1x.com/2025/04/16/pEfs1L4.jpg',
