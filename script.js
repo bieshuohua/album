@@ -33,6 +33,11 @@ mobileMenuBtn.addEventListener('click', () => {
 // Gallery data
 const galleryData = [
     {
+        src: 'https://s21.ax1x.com/2025/04/21/pE5PK3Q.jpg',
+        category: 'sleep',
+        title: '小欣觉觉7'
+    },
+    {
         src: 'https://s21.ax1x.com/2025/04/20/pE4BaQO.jpg',
         category: 'sleep',
         title: '小欣觉觉6'
