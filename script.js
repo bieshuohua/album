@@ -33,6 +33,11 @@ mobileMenuBtn.addEventListener('click', () => {
 // Gallery data
 const galleryData = [
     {
+        src: 'https://s21.ax1x.com/2025/04/22/pE5rwkj.jpg',
+        category: 'painting',
+        title: '小欣恶魔'
+    },
+    {
         src: 'https://s21.ax1x.com/2025/04/21/pE5PQjs.jpg',
         category: 'sleep',
         title: '小欣觉觉8'
