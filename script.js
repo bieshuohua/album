@@ -404,6 +404,28 @@ document.addEventListener('keydown', (e) => {
 // Initialize gallery
 renderGallery();
 
+// 自动播放音乐
+window.addEventListener('load', () => {
+    const audioPlayer = document.getElementById('audio-player');
+    if (audioPlayer) {
+        audioPlayer.play().catch(error => {
+            console.warn('自动播放被浏览器阻止:', error);
+        });
+    }
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const playPauseIcon = document.getElementById('play-pause-icon');
+    // audioPlayer 已经声明
+    playPauseBtn.addEventListener('click', () => {
+        if (audioPlayer.paused) {
+            audioPlayer.play();
+            playPauseIcon.classList.replace('fa-play', 'fa-pause');
+        } else {
+            audioPlayer.pause();
+            playPauseIcon.classList.replace('fa-pause', 'fa-play');
+        }
+    });
+});
+
 // 监听页面滚动，给header加阴影和模糊
 window.addEventListener('scroll', () => {
     if (window.scrollY > 10) {

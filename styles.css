@@ -405,3 +405,53 @@ footer {
         font-size: 2rem;
     }
 } 
+/* 音乐播放器现代化样式 */
+.music-player .player-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--card-background);
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+.music-player .song-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-color);
+    margin-right: 1rem;
+    flex: 1;
+}
+
+.music-player .audio-player {
+    width: auto;
+    outline: none;
+}
+
+/* 自定义播放/暂停按钮样式 */
+.play-pause-btn {
+    background: var(--secondary-color);
+    border: none;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+    margin-left: 1rem;
+}
+
+.play-pause-btn:active {
+    transform: scale(0.9);
+}
+
+/* 隐藏原生音频控件 */
+.audio-player {
+    display: none;
+}
