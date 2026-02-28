@@ -33,6 +33,11 @@ mobileMenuBtn.addEventListener('click', () => {
 // Gallery data
 const galleryData = [
     {
+        src: 'https://s41.ax1x.com/2026/03/01/peSYLmF.jpg',
+        category: 'painting',
+        title: '2024年6月15日BB班羽球活动的小欣'
+    },
+    {
         src: 'https://s41.ax1x.com/2026/02/28/peS8YQS.png',
         category: 'painting',
         title: '花海狂奔的小欣'
@@ -237,26 +242,26 @@ const galleryData = [
         category: 'painting',
         title: '小欣角色立绘'
     },
-    {
-        src: 'https://s21.ax1x.com/2025/04/14/pEWNW3d.jpg',
-        category: 'painting',
-        title: '小女单角色立绘'
-    },
+    // {
+    //     src: 'https://s21.ax1x.com/2025/04/14/pEWNW3d.jpg',
+    //     category: 'painting',
+    //     title: '小女单角色立绘'
+    // },
     {
         src: 'https://s21.ax1x.com/2025/04/14/pEWNg4e.jpg',
         category: 'painting',
         title: '奔跑的小欣'
     },
-    {
-        src: 'https://s21.ax1x.com/2025/04/14/pEWN5ut.jpg',
-        category: 'painting',
-        title: '海边小溪静坐'
-    },
-    {
-        src: 'https://s21.ax1x.com/2025/04/14/pEWNR9H.jpg',
-        category: 'painting',
-        title: '春日小狄'
-    },
+    // {
+    //     src: 'https://s21.ax1x.com/2025/04/14/pEWN5ut.jpg',
+    //     category: 'painting',
+    //     title: '海边小溪静坐'
+    // },
+    // {
+    //     src: 'https://s21.ax1x.com/2025/04/14/pEWNR9H.jpg',
+    //     category: 'painting',
+    //     title: '春日小狄'
+    // },
     {
         src: 'https://s21.ax1x.com/2025/04/14/pEWNcND.jpg',
         category: 'painting',
