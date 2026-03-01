@@ -33,6 +33,11 @@ mobileMenuBtn.addEventListener('click', () => {
 // Gallery data
 const galleryData = [
     {
+        src: 'https://s41.ax1x.com/2026/03/01/peSgnOJ.jpg',
+        category: 'painting',
+        title: '春日油菜花田'
+    },
+    {
         src: 'https://s41.ax1x.com/2026/03/01/peS6ehT.jpg',
         category: 'painting',
         title: '2024年6月15日BB班羽球活动的小欣'
