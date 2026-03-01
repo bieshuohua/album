@@ -33,12 +33,12 @@ mobileMenuBtn.addEventListener('click', () => {
 // Gallery data
 const galleryData = [
     {
-        src: 'https://s41.ax1x.com/2026/03/01/peSYLmF.jpg',
+        src: 'https://s41.ax1x.com/2026/03/01/peS6ehT.jpg',
         category: 'painting',
         title: '2024年6月15日BB班羽球活动的小欣'
     },
     {
-        src: 'https://s41.ax1x.com/2026/02/28/peS8YQS.png',
+        src: 'https://s41.ax1x.com/2026/03/01/peS6A7q.jpg',
         category: 'painting',
         title: '花海狂奔的小欣'
     },
