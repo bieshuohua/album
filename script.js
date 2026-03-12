@@ -33,6 +33,11 @@ mobileMenuBtn.addEventListener('click', () => {
 // Gallery data
 const galleryData = [
     {
+        src: 'https://s41.ax1x.com/2026/03/13/peAKsTe.jpg',
+        category: 'painting',
+        title: '花海中的小欣'
+    },
+    {
         src: 'https://s41.ax1x.com/2026/03/01/peSgnOJ.jpg',
         category: 'painting',
         title: '春日油菜花田'
