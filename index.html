@@ -27,8 +27,9 @@
 
     <main>
         <section id="home" class="hero">
+            <p class="hero-eyebrow">静静看图，慢慢翻阅</p>
             <h1>欢迎来到皮蛋的画廊</h1>
-            <p>来看看皮蛋的摄影与绘画作品</p>
+            <p class="hero-description">来看看皮蛋的摄影与绘画作品，用更舒展的方式浏览每一张图。</p>
         </section>
 
         <!-- 音乐播放器 -->
@@ -46,6 +47,15 @@
         </section>
 
         <section id="gallery" class="gallery">
+            <div class="gallery-toolbar">
+                <div class="gallery-copy">
+                    <h2>画廊</h2>
+                    <p>点击任意图片可放大查看，左右键可继续浏览。</p>
+                </div>
+                <div class="gallery-meta">
+                    <span class="gallery-count" id="gallery-count">0 张作品</span>
+                </div>
+            </div>
             <div class="gallery-filters">
                 <button class="filter-btn active" data-filter="all">全部</button>
                 <button class="filter-btn" data-filter="photography">摄影</button>
@@ -82,7 +92,13 @@
         <button class="lightbox-close">&times;</button>
         <button class="lightbox-prev">&lt;</button>
         <button class="lightbox-next">&gt;</button>
-        <img src="" alt="" class="lightbox-image">
+        <div class="lightbox-frame">
+            <img src="" alt="" class="lightbox-image">
+            <div class="lightbox-info">
+                <div class="lightbox-title"></div>
+                <div class="lightbox-counter"></div>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>

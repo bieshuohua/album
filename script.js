@@ -299,13 +299,24 @@ const galleryData = [
 // Gallery functionality
 const galleryGrid = document.querySelector('.gallery-grid');
 const filterButtons = document.querySelectorAll('.filter-btn');
+const galleryCount = document.getElementById('gallery-count');
 const lightbox = document.getElementById('lightbox');
 const lightboxImage = document.querySelector('.lightbox-image');
 const lightboxClose = document.querySelector('.lightbox-close');
 const lightboxPrev = document.querySelector('.lightbox-prev');
 const lightboxNext = document.querySelector('.lightbox-next');
+const lightboxTitle = document.querySelector('.lightbox-title');
+const lightboxCounter = document.querySelector('.lightbox-counter');
 
 let currentImageIndex = 0;
+let visibleGalleryItems = [...galleryData];
+
+const categoryLabels = {
+    all: '全部',
+    photography: '摄影',
+    painting: '绘画',
+    sleep: '觉觉专题'
+};
 
 // Lazy loading functionality
 const lazyLoadObserver = new IntersectionObserver((entries, observer) => {
@@ -350,9 +361,24 @@ function createGalleryItem(item) {
         }
     };
     image.src = item.src;
+
+    const info = document.createElement('div');
+    info.className = 'gallery-item-info';
+
+    const title = document.createElement('div');
+    title.className = 'gallery-item-title';
+    title.textContent = item.title;
+
+    const tag = document.createElement('div');
+    tag.className = 'gallery-item-tag';
+    tag.textContent = categoryLabels[item.category] || item.category;
+
+    info.appendChild(title);
+    info.appendChild(tag);
     
+    galleryItem.appendChild(info);
     galleryItem.appendChild(img);
-    galleryItem.addEventListener('click', () => openLightbox(galleryData.indexOf(item)));
+    galleryItem.addEventListener('click', () => openLightbox(visibleGalleryItems.indexOf(item)));
     
     lazyLoadObserver.observe(img);
     
@@ -361,25 +387,39 @@ function createGalleryItem(item) {
 
 function renderGallery(filter = 'all') {
     galleryGrid.innerHTML = '';
-    const filteredItems = filter === 'all' 
+    visibleGalleryItems = filter === 'all' 
         ? galleryData 
         : galleryData.filter(item => item.category === filter);
     
-    filteredItems.forEach(item => {
+    visibleGalleryItems.forEach(item => {
         galleryGrid.appendChild(createGalleryItem(item));
     });
+
+    galleryCount.textContent = `${visibleGalleryItems.length} 张作品`;
+}
+
+function updateLightboxContent() {
+    const currentItem = visibleGalleryItems[currentImageIndex];
+    if (!currentItem) return;
+
+    lightboxImage.src = currentItem.src;
+    lightboxImage.alt = currentItem.title;
+    lightboxTitle.textContent = currentItem.title;
+    lightboxCounter.textContent = `${currentImageIndex + 1} / ${visibleGalleryItems.length}`;
 }
 
 function openLightbox(index) {
     currentImageIndex = index;
+    const currentItem = visibleGalleryItems[index];
+    if (!currentItem) return;
+
     const img = new Image();
     img.onload = () => {
-        lightboxImage.src = galleryData[index].src;
-        lightboxImage.alt = galleryData[index].title;
+        updateLightboxContent();
         lightbox.classList.add('active');
         document.body.style.overflow = 'hidden';
     };
-    img.src = galleryData[index].src;
+    img.src = currentItem.src;
 }
 
 function closeLightbox() {
@@ -388,15 +428,13 @@ function closeLightbox() {
 }
 
 function showNextImage() {
-    currentImageIndex = (currentImageIndex + 1) % galleryData.length;
-    lightboxImage.src = galleryData[currentImageIndex].src;
-    lightboxImage.alt = galleryData[currentImageIndex].title;
+    currentImageIndex = (currentImageIndex + 1) % visibleGalleryItems.length;
+    updateLightboxContent();
 }
 
 function showPrevImage() {
-    currentImageIndex = (currentImageIndex - 1 + galleryData.length) % galleryData.length;
-    lightboxImage.src = galleryData[currentImageIndex].src;
-    lightboxImage.alt = galleryData[currentImageIndex].title;
+    currentImageIndex = (currentImageIndex - 1 + visibleGalleryItems.length) % visibleGalleryItems.length;
+    updateLightboxContent();
 }
 
 // Event listeners
@@ -411,6 +449,11 @@ filterButtons.forEach(button => {
 lightboxClose.addEventListener('click', closeLightbox);
 lightboxNext.addEventListener('click', showNextImage);
 lightboxPrev.addEventListener('click', showPrevImage);
+lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) {
+        closeLightbox();
+    }
+});
 
 // Keyboard navigation
 document.addEventListener('keydown', (e) => {
