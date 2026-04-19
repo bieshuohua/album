@@ -33,11 +33,6 @@ mobileMenuBtn.addEventListener('click', () => {
 // Gallery data
 const galleryData = [
   {
-  src: 'https://s41.ax1x.com/2026/04/19/pecnmUU.jpg',
-  category: 'photography',
-  title: '2026春日拍摄海报'
-},
-  {
   src: 'https://s41.ax1x.com/2026/04/06/peN1YNt.jpg',
   category: 'photography',
   title: '沉思小欣'
