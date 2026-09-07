@@ -1,36 +1,58 @@
-// Theme handling
+// 默认跟随系统主题；手动切换后记住用户的选择。
 const themeToggle = document.getElementById('theme-toggle');
 const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-const header = document.querySelector('header');
+let savedTheme = null;
+try {
+    savedTheme = localStorage.getItem('album-theme');
+} catch {
+    // 隐私模式或本地文件禁用存储时，仍可正常切换主题。
+}
+if (savedTheme !== 'dark' && savedTheme !== 'light') savedTheme = null;
 
 function setTheme(isDark) {
-    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-    themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+    document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+    const label = isDark ? '切换为浅色主题' : '切换为深色主题';
+    themeToggle.setAttribute('aria-label', label);
+    themeToggle.title = label;
 }
-
-// Initialize theme based on system preference
-setTheme(prefersDarkScheme.matches);
-
-// Listen for system theme changes
-prefersDarkScheme.addEventListener('change', (e) => {
-    setTheme(e.matches);
+setTheme(savedTheme ? savedTheme === 'dark' : prefersDarkScheme.matches);
+prefersDarkScheme.addEventListener('change', event => {
+    if (!savedTheme) setTheme(event.matches);
 });
-
-// Manual theme toggle
 themeToggle.addEventListener('click', () => {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    setTheme(!isDark);
+    const isDark = document.documentElement.dataset.theme !== 'dark';
+    setTheme(isDark);
+    savedTheme = isDark ? 'dark' : 'light';
+    try {
+        localStorage.setItem('album-theme', savedTheme);
+    } catch {
+        // 存储不可用不影响本次浏览。
+    }
 });
 
-// Mobile menu handling
+// 移动端菜单同步可访问状态，选中导航后自动收起。
 const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
 const navLinks = document.querySelector('.nav-links');
-
+function setMenuOpen(isOpen) {
+    navLinks.classList.toggle('active', isOpen);
+    mobileMenuBtn.setAttribute('aria-expanded', String(isOpen));
+    mobileMenuBtn.setAttribute('aria-label', isOpen ? '收起导航' : '展开导航');
+}
 mobileMenuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
+    setMenuOpen(mobileMenuBtn.getAttribute('aria-expanded') !== 'true');
+});
+navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => setMenuOpen(false));
+});
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && mobileMenuBtn.getAttribute('aria-expanded') === 'true') {
+        setMenuOpen(false);
+        mobileMenuBtn.focus();
+    }
 });
 
-// Gallery data
+// 作品地址、标题和顺序沿用现有画廊。
+
 const galleryData = [
   {
   src: 'https://s41.ax1x.com/2026/04/19/pecnmUU.jpg',
@@ -289,7 +311,8 @@ const galleryData = [
     }
 ];
 
-// Gallery functionality
+
+// 作品墙采用等高行布局，保留自然比例与原有阅读顺序。
 const galleryGrid = document.querySelector('.gallery-grid');
 const filterButtons = document.querySelectorAll('.filter-btn');
 const galleryCount = document.getElementById('gallery-count');
@@ -300,193 +323,252 @@ const lightboxPrev = document.querySelector('.lightbox-prev');
 const lightboxNext = document.querySelector('.lightbox-next');
 const lightboxTitle = document.querySelector('.lightbox-title');
 const lightboxCounter = document.querySelector('.lightbox-counter');
-
-let currentImageIndex = 0;
+const lightboxCategory = document.querySelector('.lightbox-category');
+const lightboxStatus = document.querySelector('.lightbox-status');
+const categoryLabels = { all: '全部作品', photography: '摄影', painting: '绘画', sleep: '觉觉专题' };
+// 加载后自动读取并缓存原始比例，作品数据无需维护宽高。
+const imageRatios = new Map();
 let visibleGalleryItems = [...galleryData];
+let galleryElements = [];
+let currentImageIndex = 0;
+let previousFocus = null;
+let layoutFrame = 0;
 
-const categoryLabels = {
-    all: '全部',
-    photography: '摄影',
-    painting: '绘画',
-    sleep: '觉觉专题'
-};
+function scheduleGalleryLayout() {
+    if (layoutFrame) return;
+    layoutFrame = requestAnimationFrame(() => {
+        layoutFrame = 0;
+        layoutGallery();
+    });
+}
 
-// Lazy loading functionality
-const lazyLoadObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const img = entry.target;
-            const src = img.dataset.src;
-            if (src) {
-                const image = new Image();
-                image.onload = () => {
-                    img.src = src;
-                    img.classList.add('loaded');
-                    img.removeAttribute('data-src');
-                    observer.unobserve(img);
-                };
-                image.src = src;
+function layoutGallery() {
+    // 保留容器的小数像素，防止百分比边距下末张图片意外换行。
+    const width = galleryGrid.getBoundingClientRect().width;
+    if (!width) return;
+    const galleryStyle = getComputedStyle(galleryGrid);
+    const gap = parseFloat(galleryStyle.columnGap) || 10;
+    const placeholderRatio = parseFloat(galleryStyle.getPropertyValue('--gallery-placeholder-ratio')) || .75;
+    const targetHeight = width < 600 ? Math.min(250, width * .7) : Math.min(390, width * .29);
+    let row = [];
+    let ratioSum = 0;
+
+    function placeRow(items, sum, isLast = false) {
+        const availableWidth = width - gap * (items.length - 1);
+        const height = Math.min(availableWidth / sum, isLast ? targetHeight : Infinity);
+        // 脚本只传递行高与比例，实际宽高和亚像素容差统一由样式处理。
+        items.forEach(({ element, ratio }) => {
+            element.style.setProperty('--gallery-row-height', `${height}px`);
+            element.style.setProperty('--gallery-image-ratio', String(ratio));
+        });
+    }
+
+    galleryElements.forEach(element => {
+        const ratio = imageRatios.get(element.dataset.src) || placeholderRatio;
+        const candidateSum = ratioSum + ratio;
+        const candidateHeight = (width - gap * row.length) / candidateSum;
+        if (row.length && candidateHeight < targetHeight) {
+            const previousHeight = (width - gap * (row.length - 1)) / ratioSum;
+            if (Math.abs(previousHeight - targetHeight) < Math.abs(candidateHeight - targetHeight)) {
+                placeRow(row, ratioSum);
+                row = [];
+                ratioSum = 0;
+            }
+        }
+        row.push({ element, ratio });
+        ratioSum += ratio;
+        if ((width - gap * (row.length - 1)) / ratioSum <= targetHeight) {
+            placeRow(row, ratioSum);
+            row = [];
+            ratioSum = 0;
+        }
+    });
+    if (row.length) placeRow(row, ratioSum, true);
+}
+
+function createGalleryItem(item, index) {
+    // 使用原生按钮，让作品支持 Tab、回车和空格操作。
+    const element = document.createElement('button');
+    element.type = 'button';
+    element.className = 'gallery-item';
+    element.dataset.category = item.category;
+    element.dataset.src = item.src;
+    element.setAttribute('aria-label', `查看${item.title}，${categoryLabels[item.category]}`);
+    element.setAttribute('aria-haspopup', 'dialog');
+    const img = document.createElement('img');
+    img.alt = item.title;
+    img.loading = index < 6 ? 'eager' : 'lazy';
+    img.decoding = 'async';
+    if (index < 2) img.fetchPriority = 'high';
+    const status = document.createElement('span');
+    status.className = 'image-status';
+    status.textContent = '作品加载中';
+    status.setAttribute('aria-hidden', 'true');
+    img.addEventListener('load', () => {
+        img.classList.add('loaded');
+        status.hidden = true;
+        // 从实际显示的图片读取尺寸，不再为测量比例额外下载全部作品。
+        if (img.naturalWidth && img.naturalHeight) {
+            const ratio = img.naturalWidth / img.naturalHeight;
+            if (imageRatios.get(item.src) !== ratio) {
+                imageRatios.set(item.src, ratio);
+                if (element.isConnected) scheduleGalleryLayout();
             }
         }
     });
-}, {
-    rootMargin: '50px 0px',
-    threshold: 0.1
-});
-
-function createGalleryItem(item) {
-    const galleryItem = document.createElement('div');
-    galleryItem.className = 'gallery-item';
-    galleryItem.dataset.category = item.category;
-    
-    const img = document.createElement('img');
-    img.dataset.src = item.src;
-    img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"%3E%3C/svg%3E';
-    img.alt = item.title;
-    img.className = 'lazy-load';
-    
-    // 检查图片宽高比
-    const image = new Image();
-    image.onload = function() {
-        const aspectRatio = this.width / this.height;
-        if (aspectRatio > 1.2) { // 如果宽高比大于1.2，则认为是宽图
-            galleryItem.classList.add('wide');
-        }
-    };
-    image.src = item.src;
-
-    const info = document.createElement('div');
+    img.addEventListener('error', () => {
+        element.classList.add('has-error');
+        status.textContent = '图片暂未加载，点击重试';
+    });
+    img.src = item.src;
+    const info = document.createElement('span');
     info.className = 'gallery-item-info';
-
-    const title = document.createElement('div');
+    info.setAttribute('aria-hidden', 'true');
+    const title = document.createElement('span');
     title.className = 'gallery-item-title';
     title.textContent = item.title;
-
-    const tag = document.createElement('div');
+    const tag = document.createElement('span');
     tag.className = 'gallery-item-tag';
-    tag.textContent = categoryLabels[item.category] || item.category;
-
-    info.appendChild(title);
-    info.appendChild(tag);
-    
-    galleryItem.appendChild(info);
-    galleryItem.appendChild(img);
-    galleryItem.addEventListener('click', () => openLightbox(visibleGalleryItems.indexOf(item)));
-    
-    lazyLoadObserver.observe(img);
-    
-    return galleryItem;
+    tag.textContent = categoryLabels[item.category];
+    info.append(title, tag);
+    element.append(img, status, info);
+    element.addEventListener('click', () => openLightbox(index));
+    return element;
 }
 
 function renderGallery(filter = 'all') {
-    galleryGrid.innerHTML = '';
-    visibleGalleryItems = filter === 'all' 
-        ? galleryData 
-        : galleryData.filter(item => item.category === filter);
-    
-    visibleGalleryItems.forEach(item => {
-        galleryGrid.appendChild(createGalleryItem(item));
+    visibleGalleryItems = filter === 'all' ? [...galleryData] : galleryData.filter(item => item.category === filter);
+    galleryElements = visibleGalleryItems.map(createGalleryItem);
+    galleryGrid.replaceChildren(...galleryElements);
+    filterButtons.forEach(button => {
+        const isActive = button.dataset.filter === filter;
+        button.classList.toggle('active', isActive);
+        button.setAttribute('aria-pressed', String(isActive));
     });
-
-    galleryCount.textContent = `${visibleGalleryItems.length} 张作品`;
+    galleryCount.textContent = `${categoryLabels[filter]}，共 ${visibleGalleryItems.length} 张作品`;
+    layoutGallery();
 }
 
-function updateLightboxContent() {
-    const currentItem = visibleGalleryItems[currentImageIndex];
-    if (!currentItem) return;
+filterButtons.forEach(button => {
+    const filter = button.dataset.filter;
+    const count = filter === 'all' ? galleryData.length : galleryData.filter(item => item.category === filter).length;
+    button.querySelector('.filter-count').textContent = String(count).padStart(2, '0');
+    button.addEventListener('click', () => renderGallery(filter));
+});
 
-    lightboxImage.src = currentItem.src;
-    lightboxImage.alt = currentItem.title;
-    lightboxTitle.textContent = currentItem.title;
-    lightboxCounter.textContent = `${currentImageIndex + 1} / ${visibleGalleryItems.length}`;
+// 仅容器宽度改变时重排，避免图片高度变化触发观察器循环。
+let previousGalleryWidth = 0;
+const galleryResizeObserver = new ResizeObserver(entries => {
+    const width = entries[0].contentRect.width;
+    if (width !== previousGalleryWidth) {
+        previousGalleryWidth = width;
+        scheduleGalleryLayout();
+    }
+});
+galleryResizeObserver.observe(galleryGrid);
+renderGallery();
+
+function updateLightboxContent() {
+    const item = visibleGalleryItems[currentImageIndex];
+    if (!item) return;
+    lightboxImage.classList.remove('loaded');
+    lightboxStatus.textContent = '正在加载作品…';
+    lightboxImage.onload = () => {
+        lightboxImage.classList.add('loaded');
+        lightboxStatus.textContent = '';
+    };
+    lightboxImage.onerror = () => {
+        lightboxStatus.textContent = '图片暂时无法加载，请稍后重试，或继续浏览其他作品。';
+    };
+    lightboxImage.alt = item.title;
+    lightboxImage.src = item.src;
+    lightboxTitle.textContent = item.title;
+    lightboxCategory.textContent = categoryLabels[item.category];
+    lightboxCounter.textContent = `${String(currentImageIndex + 1).padStart(2, '0')} / ${String(visibleGalleryItems.length).padStart(2, '0')}`;
+    lightboxPrev.disabled = lightboxNext.disabled = visibleGalleryItems.length < 2;
 }
 
 function openLightbox(index) {
+    if (!visibleGalleryItems[index]) return;
     currentImageIndex = index;
-    const currentItem = visibleGalleryItems[index];
-    if (!currentItem) return;
-
-    const img = new Image();
-    img.onload = () => {
-        updateLightboxContent();
-        lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    };
-    img.src = currentItem.src;
+    previousFocus = document.activeElement;
+    updateLightboxContent();
+    // 立即打开并显示加载状态，慢图或坏图也不会让点击没有反馈。
+    lightbox.showModal();
+    document.body.classList.add('lightbox-open');
 }
-
-function closeLightbox() {
-    lightbox.classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-function showNextImage() {
-    currentImageIndex = (currentImageIndex + 1) % visibleGalleryItems.length;
+function closeLightbox() { lightbox.close(); }
+function changeImage(direction) {
+    if (!visibleGalleryItems.length) return;
+    currentImageIndex = (currentImageIndex + direction + visibleGalleryItems.length) % visibleGalleryItems.length;
     updateLightboxContent();
 }
-
-function showPrevImage() {
-    currentImageIndex = (currentImageIndex - 1 + visibleGalleryItems.length) % visibleGalleryItems.length;
-    updateLightboxContent();
-}
-
-// Event listeners
-filterButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        filterButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        renderGallery(button.dataset.filter);
-    });
-});
-
 lightboxClose.addEventListener('click', closeLightbox);
-lightboxNext.addEventListener('click', showNextImage);
-lightboxPrev.addEventListener('click', showPrevImage);
-lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) {
-        closeLightbox();
+lightboxNext.addEventListener('click', () => changeImage(1));
+lightboxPrev.addEventListener('click', () => changeImage(-1));
+lightbox.addEventListener('click', event => {
+    if (event.target === lightbox) closeLightbox();
+});
+lightbox.addEventListener('close', () => {
+    document.body.classList.remove('lightbox-open');
+    if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
+});
+lightbox.addEventListener('keydown', event => {
+    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+        event.preventDefault();
+        changeImage(event.key === 'ArrowRight' ? 1 : -1);
     }
 });
+// 手机支持横向轻扫切换，纵向手势不触发翻页。
+let touchStart = null;
+lightbox.addEventListener('touchstart', event => {
+    touchStart = event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null;
+}, { passive: true });
+lightbox.addEventListener('touchend', event => {
+    if (!touchStart) return;
+    const dx = event.changedTouches[0].clientX - touchStart.x;
+    const dy = event.changedTouches[0].clientY - touchStart.y;
+    if (Math.abs(dx) > 60 && Math.abs(dy) < 50) changeImage(dx < 0 ? 1 : -1);
+    touchStart = null;
+}, { passive: true });
+lightbox.addEventListener('touchcancel', () => { touchStart = null; });
 
-// Keyboard navigation
-document.addEventListener('keydown', (e) => {
-    if (lightbox.classList.contains('active')) {
-        if (e.key === 'Escape') closeLightbox();
-        if (e.key === 'ArrowRight') showNextImage();
-        if (e.key === 'ArrowLeft') showPrevImage();
-    }
-});
-
-// Initialize gallery
-renderGallery();
-
-// 自动播放音乐
-window.addEventListener('load', () => {
-    const audioPlayer = document.getElementById('audio-player');
-    if (audioPlayer) {
-        audioPlayer.play().catch(error => {
-            console.warn('自动播放被浏览器阻止:', error);
-        });
-    }
-    const playPauseBtn = document.getElementById('play-pause-btn');
-    const playPauseIcon = document.getElementById('play-pause-icon');
-    // audioPlayer 已经声明
-    playPauseBtn.addEventListener('click', () => {
-        if (audioPlayer.paused) {
-            audioPlayer.play();
-            playPauseIcon.classList.replace('fa-play', 'fa-pause');
-        } else {
-            audioPlayer.pause();
-            playPauseIcon.classList.replace('fa-pause', 'fa-play');
+// 播放图标以音频实际状态为准，播放失败时提供可见反馈。
+const audioPlayer = document.getElementById('audio-player');
+const playPauseBtn = document.getElementById('play-pause-btn');
+const musicStatus = document.getElementById('music-status');
+function syncMusicState() {
+    const isPlaying = !audioPlayer.paused;
+    playPauseBtn.classList.toggle('is-playing', isPlaying);
+    playPauseBtn.setAttribute('aria-pressed', String(isPlaying));
+    playPauseBtn.setAttribute('aria-label', isPlaying ? '暂停小欣之歌' : '播放小欣之歌');
+}
+playPauseBtn.addEventListener('click', async () => {
+    musicStatus.textContent = '';
+    musicStatus.className = 'sr-only';
+    if (audioPlayer.paused) {
+        try {
+            await audioPlayer.play();
+        } catch {
+            musicStatus.className = 'music-error';
+            musicStatus.textContent = '音乐暂时无法播放，请稍后重试。';
         }
-    });
-});
-
-// 监听页面滚动，给header加阴影和模糊
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 10) {
-        header.classList.add('scrolled');
     } else {
-        header.classList.remove('scrolled');
+        audioPlayer.pause();
     }
-}); 
+    syncMusicState();
+});
+['play', 'pause', 'ended'].forEach(event => audioPlayer.addEventListener(event, syncMusicState));
+
+// 导航的当前位置随滚动更新。
+const aboutSection = document.getElementById('about');
+const navObserver = new IntersectionObserver(entries => {
+    const isAbout = entries[0].isIntersecting;
+    navLinks.querySelectorAll('a').forEach(link => {
+        const active = link.getAttribute('href') === (isAbout ? '#about' : '#gallery');
+        link.classList.toggle('active', active);
+        if (active) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+    });
+}, { threshold: .15 });
+navObserver.observe(aboutSection);

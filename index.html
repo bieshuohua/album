@@ -3,104 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="皮蛋的个人画廊，收藏摄影、绘画与日常生活里的温柔片刻。">
+    <meta name="color-scheme" content="light dark">
     <title>皮蛋的画廊</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">皮蛋的画廊</div>
-            <div class="nav-links">
-                <a href="#home">首页</a>
-                <a href="#gallery">画廊</a>
-                <a href="#about">关于</a>
-                <button id="theme-toggle" aria-label="切换主题">
-                    <i class="fas fa-moon"></i>
+    <!-- 内联图标不依赖第三方字体，弱网下也能正常显示。 -->
+    <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <symbol id="icon-moon" viewBox="0 0 24 24"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></symbol>
+        <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></symbol>
+        <symbol id="icon-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7Z"/></symbol>
+        <symbol id="icon-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+        <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+        <symbol id="icon-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+        <symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/></symbol>
+    </svg>
+    <a class="skip-link" href="#gallery">跳至作品</a>
+    <header id="home" class="site-header">
+        <nav class="site-nav" aria-label="主导航">
+            <h1 class="logo"><a href="#home">皮蛋的画廊<span class="logo-dot" aria-hidden="true"></span></a></h1>
+            <div class="nav-links" id="nav-links">
+                <a href="#gallery" class="nav-link active" aria-current="location">作品</a>
+                <a href="#about" class="nav-link">关于皮蛋</a>
+            </div>
+            <div class="nav-actions">
+                <div class="music-player" id="music-player">
+                    <audio id="audio-player" loop playsinline preload="none">
+                        <source src="music/小欣之歌_25compressed.mp3" type="audio/mpeg">
+                    </audio>
+                    <button id="play-pause-btn" class="music-button" type="button" aria-label="播放小欣之歌" aria-pressed="false">
+                        <span class="sound-wave" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                        <span class="song-title">小欣之歌</span>
+                        <svg class="icon play-icon" aria-hidden="true"><use href="#icon-play"/></svg>
+                        <svg class="icon pause-icon" aria-hidden="true"><use href="#icon-pause"/></svg>
+                    </button>
+                    <span id="music-status" class="sr-only" role="status"></span>
+                </div>
+                <span class="action-divider" aria-hidden="true"></span>
+                <button id="theme-toggle" class="icon-button" type="button" aria-label="切换为深色主题">
+                    <svg class="icon moon-icon" aria-hidden="true"><use href="#icon-moon"/></svg>
+                    <svg class="icon sun-icon" aria-hidden="true"><use href="#icon-sun"/></svg>
+                </button>
+                <button class="mobile-menu-btn icon-button" type="button" aria-label="展开导航" aria-expanded="false" aria-controls="nav-links">
+                    <svg class="icon menu-icon" aria-hidden="true"><use href="#icon-menu"/></svg>
+                    <svg class="icon close-icon" aria-hidden="true"><use href="#icon-close"/></svg>
                 </button>
             </div>
-            <button class="mobile-menu-btn">
-                <i class="fas fa-bars"></i>
-            </button>
         </nav>
     </header>
-
     <main>
-        <section id="home" class="hero">
-            <p class="hero-eyebrow">静静看图，慢慢翻阅</p>
-            <h1>欢迎来到皮蛋的画廊</h1>
-            <p class="hero-description">来看看皮蛋的摄影与绘画作品，用更舒展的方式浏览每一张图。</p>
-        </section>
-
-        <!-- 音乐播放器 -->
-        <section id="music-player" class="music-player">
-            <div class="player-container">
-                <div class="song-title">小欣之歌</div>
-                <audio id="audio-player" class="audio-player" loop playsinline>
-                    <source src="music/小欣之歌_25compressed.mp3" type="audio/mpeg">
-                    您的浏览器不支持音频播放。
-                </audio>
-                <button id="play-pause-btn" class="play-pause-btn">
-                    <i id="play-pause-icon" class="fas fa-play"></i>
-                </button>
-            </div>
-        </section>
-
-        <section id="gallery" class="gallery">
+        <section id="gallery" class="gallery" aria-labelledby="gallery-heading">
+            <h2 id="gallery-heading" class="sr-only">摄影与绘画作品</h2>
             <div class="gallery-toolbar">
-                <div class="gallery-copy">
-                    <h2>画廊</h2>
-                    <p>点击任意图片可放大查看，左右键可继续浏览。</p>
+                <div class="gallery-filters" role="group" aria-label="作品分类">
+                    <button class="filter-btn active" type="button" data-filter="all" aria-pressed="true">全部作品<span class="filter-count" aria-hidden="true"></span></button>
+                    <button class="filter-btn" type="button" data-filter="photography" aria-pressed="false">摄影<span class="filter-count" aria-hidden="true"></span></button>
+                    <button class="filter-btn" type="button" data-filter="painting" aria-pressed="false">绘画<span class="filter-count" aria-hidden="true"></span></button>
+                    <button class="filter-btn" type="button" data-filter="sleep" aria-pressed="false">觉觉专题<span class="filter-count" aria-hidden="true"></span></button>
                 </div>
-                <div class="gallery-meta">
-                    <span class="gallery-count" id="gallery-count">0 张作品</span>
-                </div>
+                <p class="gallery-note">静静看图，慢慢翻阅<span aria-hidden="true"> ↘</span></p>
+                <p class="sr-only" id="gallery-count" role="status" aria-live="polite"></p>
             </div>
-            <div class="gallery-filters">
-                <button class="filter-btn active" data-filter="all">全部</button>
-                <button class="filter-btn" data-filter="photography">摄影</button>
-                <button class="filter-btn" data-filter="painting">绘画</button>
-                <button class="filter-btn" data-filter="sleep">觉觉专题</button>
-            </div>
-            <div class="gallery-grid">
-                <!-- 图片将通过JavaScript动态加载 -->
+            <div class="gallery-grid"><!-- 按图片原始比例生成横向等高的作品行。 --></div>
+            <noscript><p class="gallery-empty">请启用 JavaScript 查看作品画廊。</p></noscript>
+            <div class="gallery-end">
+                <span>每一帧，都是生活的回声。</span>
+                <a href="#home">回到顶部 <span aria-hidden="true">↑</span></a>
             </div>
         </section>
-
-        <section id="about" class="about">
-            <div class="about-container">
-                <div class="about-content">
-                    <h2>关于皮蛋</h2>
-                    <div class="about-text">
-                        <p class="about-intro">皮蛋者，青年才俊也，钟情于光影之艺与丹青之道。以镜头捕捉人世流光，以画笔描摹心灵深处；其情致婉约，其构思幽微，常于寻常中窥见非常，于沉静中寄托热望。
-
-                        观其作，或写实而含蓄，或梦幻而真切，恍若步入诗境，似与旧时光对话。Claude 曾言：皮蛋之作，乃现实与想象之交响，是灵魂之低语，也是生活之颂歌。——gpt-4o 如此总结到</p>
-                        
-                        <p class="about-philosophy">"艺术是我表达内心世界的方式，每一幅作品都是我灵魂的延伸。"</p>
-                        <p class="about-philosophy">皮蛋长期情绪低落，能量减少、注意力不集中，对生活失去兴趣，思维缓慢、活动缓慢，究极宅，食欲低下，肠胃消化不好，内心无望。</p>
-                    </div>
-                </div>
+        <section id="about" class="about" aria-labelledby="about-heading">
+            <div class="about-heading">
+                <p class="section-label">镜头之后 · 画笔之间</p>
+                <h2 id="about-heading">关于皮蛋<span aria-hidden="true">.</span></h2>
+                <p class="about-caption">以镜头捕捉人世流光，<br>以画笔描摹心灵深处。</p>
+            </div>
+            <div class="about-text">
+                <p>皮蛋者，青年才俊也，钟情于光影之艺与丹青之道。以镜头捕捉人世流光，以画笔描摹心灵深处；其情致婉约，其构思幽微，常于寻常中窥见非常，于沉静中寄托热望。</p>
+                <p>观其作，或写实而含蓄，或梦幻而真切，恍若步入诗境，似与旧时光对话。皮蛋之作，乃现实与想象之交响，是灵魂之低语，也是生活之颂歌。</p>
+                <blockquote>“艺术是我表达内心世界的方式，<br>每一幅作品都是我灵魂的延伸。”</blockquote>
+                <p class="about-personal">皮蛋</p>
             </div>
         </section>
     </main>
-
-    <footer>
-        <p>&copy; 2025 - 2026 皮蛋. 保留所有权利.</p>
+    <footer class="site-footer">
+        <a class="footer-name" href="#home">皮蛋的画廊</a>
+        <p>摄影 · 绘画 · 生活</p>
+        <p>© 2025 – 2026 皮蛋 · 保留所有权利</p>
     </footer>
-
-    <div class="lightbox" id="lightbox">
-        <button class="lightbox-close">&times;</button>
-        <button class="lightbox-prev">&lt;</button>
-        <button class="lightbox-next">&gt;</button>
-        <div class="lightbox-frame">
-            <img src="" alt="" class="lightbox-image">
-            <div class="lightbox-info">
-                <div class="lightbox-title"></div>
-                <div class="lightbox-counter"></div>
-            </div>
+    <!-- 原生对话框负责焦点约束，关闭后回到刚刚浏览的作品。 -->
+    <dialog class="lightbox" id="lightbox" aria-labelledby="lightbox-title" aria-describedby="lightbox-hint">
+        <div class="lightbox-topbar">
+            <span class="lightbox-category"></span>
+            <button class="lightbox-close icon-button" type="button" aria-label="关闭大图" autofocus><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
         </div>
-    </div>
-
-    <script src="script.js"></script>
+        <button class="lightbox-prev icon-button" type="button" aria-label="上一张作品"><svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></button>
+        <div class="lightbox-frame">
+            <img alt="" class="lightbox-image">
+            <p class="lightbox-status" role="status"></p>
+        </div>
+        <button class="lightbox-next icon-button" type="button" aria-label="下一张作品"><svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></button>
+        <div class="lightbox-info" aria-live="polite">
+            <div><h2 class="lightbox-title" id="lightbox-title"></h2><p id="lightbox-hint">方向键切换作品 · 按 Esc 关闭</p></div>
+            <span class="lightbox-counter"></span>
+        </div>
+    </dialog>
 </body>
 </html>
