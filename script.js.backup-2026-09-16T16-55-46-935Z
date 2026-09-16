@@ -55,46 +55,6 @@ document.addEventListener('keydown', event => {
 
 const galleryData = [
   {
-  src: 'https://s41.ax1x.com/2026/09/17/pnu5mbq.jpg',
-  category: 'photography',
-  title: 'pnu5mbq.jpg'
-},
-  {
-  src: 'https://s41.ax1x.com/2026/09/17/pnu5ZKs.jpg',
-  category: 'photography',
-  title: 'pnu5ZKs.jpg'
-},
-  {
-  src: 'https://s41.ax1x.com/2026/09/17/pnu5KaV.jpg',
-  category: 'photography',
-  title: 'pnu5KaV.jpg'
-},
-  {
-  src: 'https://s41.ax1x.com/2026/09/17/pnu5uV0.jpg',
-  category: 'photography',
-  title: 'pnu5uV0.jpg'
-},
-  {
-  src: 'https://s41.ax1x.com/2026/09/17/pnu5ern.jpg',
-  category: 'photography',
-  title: 'pnu5ern.jpg'
-},
-  {
-  src: 'https://s41.ax1x.com/2026/09/17/pnu5k8g.jpg',
-  category: 'photography',
-  title: 'pnu5k8g.jpg'
-},
-  {
-  src: 'https://s41.ax1x.com/2026/09/17/pnu5A2Q.jpg',
-  category: 'photography',
-  title: 'pnu5A2Q.jpg'
-},
-  {
-  src: 'https://s41.ax1x.com/2026/09/17/pnu5Evj.jpg',
-  category: 'photography',
-  title: 'pnu5Evj.jpg'
-},
-  {
   src: 'https://s41.ax1x.com/2026/04/19/pecnmUU.jpg',
   category: 'photography',
   title: '2026春日拍摄海报'
