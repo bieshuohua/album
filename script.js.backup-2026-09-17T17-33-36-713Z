@@ -55,46 +55,6 @@ document.addEventListener('keydown', event => {
 
 const galleryData = [
   {
-  src: 'https://s41.ax1x.com/2026/09/18/pnK2g78.jpg',
-  category: 'photography',
-  title: 'pnK2g78.jpg'
-},
-  {
-  src: 'https://s41.ax1x.com/2026/09/18/pnK2fhQ.jpg',
-  category: 'photography',
-  title: 'pnK2fhQ.jpg'
-},
-  {
-  src: 'https://s41.ax1x.com/2026/09/18/pnK251s.jpg',
-  category: 'photography',
-  title: 'pnK251s.jpg'
-},
-  {
-  src: 'https://s41.ax1x.com/2026/09/18/pnK26nP.jpg',
-  category: 'photography',
-  title: 'pnK26nP.jpg'
-},
-  {
-  src: 'https://s41.ax1x.com/2026/09/18/pnK2c0f.jpg',
-  category: 'photography',
-  title: 'pnK2c0f.jpg'
-},
-  {
-  src: 'https://s41.ax1x.com/2026/09/18/pnK2Wtg.jpg',
-  category: 'photography',
-  title: 'pnK2Wtg.jpg'
-},
-  {
-  src: 'https://s41.ax1x.com/2026/09/18/pnK2RAS.jpg',
-  category: 'photography',
-  title: 'pnK2RAS.jpg'
-},
-  {
-  src: 'https://s41.ax1x.com/2026/09/18/pnK24pj.jpg',
-  category: 'photography',
-  title: 'pnK24pj.jpg'
-},
-  {
   src: 'https://s41.ax1x.com/2026/09/17/pnu5mbq.jpg',
   category: 'photography',
   title: 'pnu5mbq.jpg'
